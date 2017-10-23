@@ -221,7 +221,7 @@ void UKF::Prediction(double delta_t) {
 
     // state difference
     VectorXd x_diff = Xsig_pred_.col(i) - x_;
-    //angle normalization // radar only???
+    //TODO angle normalization // radar only???
     while (x_diff(3) > M_PI) x_diff(3) -= 2. * M_PI;
     while (x_diff(3) < -M_PI) x_diff(3) += 2. * M_PI;
 
@@ -276,10 +276,12 @@ void UKF::UpdateCommon(MeasurementPackage meas_package, MatrixXd Zsig, int n_z) 
   for (int i = 0; i < 2 * n_aug_ + 1; i++) {
     //residual
     VectorXd z_diff = Zsig.col(i) - z_pred;
+    // TODO RADAR only?
     while (z_diff(1) > M_PI) z_diff(1) -= 2. * M_PI;
     while (z_diff(1) < -M_PI) z_diff(1) += 2. * M_PI;
     // State difference
     VectorXd x_diff = Xsig_pred_.col(i) - x_;
+    // TODO RADAR only?
     while (x_diff(3) > M_PI) x_diff(3) -= 2. * M_PI;
     while (x_diff(3) < -M_PI) x_diff(3) += 2. * M_PI;
     Tc = Tc + weights_(i) * x_diff * z_diff.transpose();
