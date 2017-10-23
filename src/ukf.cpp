@@ -117,6 +117,29 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
     return;
   }
 
+  double dt = (meas_package.timestamp_ - time_us_) / 1000000.0;
+  time_us_ = meas_package.timestamp_;
+  
+  //predict
+  Prediction(dt);
+
+  /*****************************************************************************
+   *  Update
+   ****************************************************************************/
+
+  /**
+     * Use the sensor type to perform the update step.
+     * Update the state and covariance matrices.
+   */
+
+  if (meas_package.sensor_type_ == MeasurementPackage::RADAR) {
+    UpdateRadar(meas_package);
+    // Radar updates
+  } else {
+    UpdateLidar(meas_package);
+    // Laser updates
+  }
+
 }
 
 /**
