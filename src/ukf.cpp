@@ -353,9 +353,15 @@ void UKF::UpdateCommon(MeasurementPackage meas_package, MatrixXd Zsig, int n_z) 
 
   //add measurement noise covariance matrix
   MatrixXd R = MatrixXd(n_z, n_z);
-  R << std_radr_ * std_radr_, 0, 0,
-    0, std_radphi_ * std_radphi_, 0,
-    0, 0, std_radrd_ * std_radrd_;
+  if (meas_package.sensor_type_ == MeasurementPackage::RADAR){
+    R << std_radr_ * std_radr_, 0, 0,
+      0, std_radphi_ * std_radphi_, 0,
+      0, 0, std_radrd_ * std_radrd_;
+  }
+  else if (meas_package.sensor_type_ == MeasurementPackage::LASER){
+    R << std_laspx_*std_laspx_, 0,
+      0, std_laspy_*std_laspy_;
+  }
   S = S + R;
 
   // Create matrix for cross correlation Tc
