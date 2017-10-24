@@ -24,10 +24,10 @@ UKF::UKF() {
   P_ = MatrixXd(5, 5);
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 2;
+  std_a_ = 2.5;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.5;
+  std_yawdd_ = 0.35;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -54,18 +54,17 @@ UKF::UKF() {
 
   is_initialized_ = false;
 
-  Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
-
-  time_us_ = 0;
-
-  weights_ = MatrixXd(2 * n_aug_ + 1);
-
   n_x_ = 5;
 
   n_aug_ = n_x_ + 2;
 
-  ///* Sigma point spreading parameter
+
   lambda_ = 3 - n_aug_;
+
+  time_us_ = 0;
+
+  weights_ = VectorXd(2 * n_aug_ + 1);
+  Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
 
   // int weights code from lecture
   double weight_0 = lambda_ / (lambda_ + n_aug_);
